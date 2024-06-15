@@ -28,7 +28,7 @@ To run the Signature Canvas application locally:
 1. Clone this repository:
 
    ```bash
-   git clone https://github.com/your/repository.git
+   git clone https://github.com/urvish209/repository.git
    ```
 
 2. Open `index.html` in your web browser.
