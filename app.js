@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById("canvas");
   const ctx = canvas.getContext("2d");
 
-  // Setup canvas for high-DPI displays
   function resizeCanvas() {
     const container = canvas.parentElement;
     const dpr = window.devicePixelRatio || 1;
@@ -10,6 +9,8 @@ document.addEventListener("DOMContentLoaded", () => {
     canvas.width = rect.width * dpr;
     canvas.height = rect.height * dpr;
     ctx.scale(dpr, dpr);
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 
   resizeCanvas();
@@ -55,33 +56,49 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.beginPath();
   }
 
-  // Mouse events
   canvas.addEventListener("mousedown", startDraw);
   canvas.addEventListener("mousemove", draw);
   canvas.addEventListener("mouseup", stopDraw);
   canvas.addEventListener("mouseleave", stopDraw);
 
-  // Touch events
   canvas.addEventListener("touchstart", startDraw);
   canvas.addEventListener("touchmove", draw);
   canvas.addEventListener("touchend", stopDraw);
 
-  // Buttons
   document.getElementById("clear").addEventListener("click", () => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
   });
 
   document.getElementById("png").addEventListener("click", () => {
+    const exportCanvas = document.createElement("canvas");
+    exportCanvas.width = canvas.width;
+    exportCanvas.height = canvas.height;
+    const exportCtx = exportCanvas.getContext("2d");
+
+    exportCtx.fillStyle = "#ffffff";
+    exportCtx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+    exportCtx.drawImage(canvas, 0, 0);
+
     const link = document.createElement("a");
     link.download = "signature.png";
-    link.href = canvas.toDataURL();
+    link.href = exportCanvas.toDataURL("image/png");
     link.click();
   });
 
   document.getElementById("pdf").addEventListener("click", () => {
+    const exportCanvas = document.createElement("canvas");
+    exportCanvas.width = canvas.width;
+    exportCanvas.height = canvas.height;
+    const exportCtx = exportCanvas.getContext("2d");
+
+    exportCtx.fillStyle = "#ffffff";
+    exportCtx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+    exportCtx.drawImage(canvas, 0, 0);
+
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF();
-    const imgData = canvas.toDataURL("image/png");
+    const imgData = exportCanvas.toDataURL("image/png");
     pdf.addImage(imgData, "PNG", 10, 10, 180, 120);
     pdf.save("signature.pdf");
   });
