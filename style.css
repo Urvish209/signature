@@ -7,7 +7,6 @@
 body {
   font-family: 'Segoe UI', sans-serif;
   background: #f4f6f8;
-  color: #333;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,56 +14,49 @@ body {
 }
 
 h1 {
+  margin-bottom: 1rem;
   font-size: 2rem;
-  margin-bottom: 1.5rem;
 }
 
-.canvas-box {
+.canvas-container {
+  border: 2px dashed #aaa;
+  border-radius: 8px;
   background: #fff;
-  border: 2px dashed #ccc;
-  border-radius: 12px;
-  padding: 1rem;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
   width: 100%;
   max-width: 700px;
+  aspect-ratio: 4/3;
+  position: relative;
 }
 
 canvas {
   width: 100%;
-  height: auto;
-  aspect-ratio: 4 / 3;
-  background-color: #fff;
+  height: 100%;
   border-radius: 8px;
   cursor: crosshair;
   touch-action: none;
 }
 
-.button-row {
+.buttons {
+  margin-top: 1rem;
   display: flex;
-  gap: 1rem;
-  margin-top: 1.5rem;
+  gap: 10px;
   flex-wrap: wrap;
   justify-content: center;
 }
 
 button {
-  background-color: #0066ff;
-  color: white;
   padding: 10px 18px;
   font-size: 16px;
+  background-color: #0066ff;
+  color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
   transition: 0.2s;
 }
 
 button:hover {
-  background-color: #004ecc;
-}
-
-button:active {
-  background-color: #003a99;
-  transform: scale(0.98);
+  background-color: #0050c9;
 }
 
 @media (max-width: 600px) {
@@ -74,9 +66,5 @@ button:active {
 
   button {
     width: 100%;
-  }
-
-  .canvas-box {
-    padding: 0.5rem;
   }
 }
