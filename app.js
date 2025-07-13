@@ -1,90 +1,72 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const canvas = document.getElementById('whiteboard');
-    const ctx = canvas.getContext('2d');
-    let drawing = false;
+document.addEventListener("DOMContentLoaded", () => {
+  const canvas = document.getElementById("signatureCanvas");
+  const ctx = canvas.getContext("2d");
 
-    // Set up high-DPI scaling
-    function setupCanvas(canvas) {
-        const dpr = window.devicePixelRatio || 1;
-        const rect = canvas.getBoundingClientRect();
-        canvas.width = rect.width * dpr;
-        canvas.height = rect.height * dpr;
-        ctx.scale(dpr, dpr);
-    }
+  // High-DPI canvas setup
+  const setupCanvas = () => {
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.scale(dpr, dpr);
+  };
 
-    setupCanvas(canvas);
+  setupCanvas();
 
-    // Function to start drawing
-    const startDrawing = (e) => {
-        drawing = true;
-        draw(e);
-    };
+  let drawing = false;
 
-    // Function to stop drawing
-    const stopDrawing = () => {
-        drawing = false;
-        ctx.beginPath();
-    };
+  const startDraw = (e) => {
+    drawing = true;
+    draw(e);
+  };
 
-    // Function to draw on the canvas
-    const draw = (e) => {
-        if (!drawing) return;
-        e.preventDefault();
+  const endDraw = () => {
+    drawing = false;
+    ctx.beginPath();
+  };
 
-        const rect = canvas.getBoundingClientRect();
-        const dpr = window.devicePixelRatio || 1;
-        const scaleX = canvas.width / (rect.width * dpr);
-        const scaleY = canvas.height / (rect.height * dpr);
+  const draw = (e) => {
+    if (!drawing) return;
 
-        let x, y;
-        if (e.touches) {
-            x = (e.touches[0].clientX - rect.left) * scaleX;
-            y = (e.touches[0].clientY - rect.top) * scaleY;
-        } else {
-            x = (e.clientX - rect.left) * scaleX;
-            y = (e.clientY - rect.top) * scaleY;
-        }
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX || e.touches[0].clientX) - rect.left;
+    const y = (e.clientY || e.touches[0].clientY) - rect.top;
 
-        ctx.lineWidth = 2; // Thinner line width
-        ctx.lineCap = 'round';
-        ctx.strokeStyle = 'black';
+    ctx.lineWidth = 2;
+    ctx.lineCap = "round";
+    ctx.strokeStyle = "#333";
 
-        ctx.lineTo(x, y);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(x, y);
-    };
+    ctx.lineTo(x, y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+  };
 
-    // Event listeners for mouse
-    canvas.addEventListener('mousedown', startDrawing);
-    canvas.addEventListener('mouseup', stopDrawing);
-    canvas.addEventListener('mousemove', draw);
+  // Mouse & touch
+  canvas.addEventListener("mousedown", startDraw);
+  canvas.addEventListener("mouseup", endDraw);
+  canvas.addEventListener("mousemove", draw);
 
-    // Event listeners for touch
-    canvas.addEventListener('touchstart', startDrawing);
-    canvas.addEventListener('touchend', stopDrawing);
-    canvas.addEventListener('touchmove', draw);
+  canvas.addEventListener("touchstart", startDraw);
+  canvas.addEventListener("touchend", endDraw);
+  canvas.addEventListener("touchmove", draw);
 
-    // Export canvas as PNG
-    document.getElementById('export-png').addEventListener('click', () => {
-        const link = document.createElement('a');
-        link.download = 'whiteboard.png';
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-    });
+  document.getElementById("clear").addEventListener("click", () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  });
 
-    // Export canvas as PDF
-    document.getElementById('export-pdf').addEventListener('click', () => {
-        const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF('landscape', 'pt', [canvas.width, canvas.height]);
+  document.getElementById("export-png").addEventListener("click", () => {
+    const link = document.createElement("a");
+    link.download = "signature.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  });
 
-        // Convert canvas to image data URL
-        const imgData = canvas.toDataURL('image/png');
-
-        // Add image to PDF
-        pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
-
-        // Save the PDF
-        pdf.save('whiteboard.pdf');
-    });
+  document.getElementById("export-pdf").addEventListener("click", () => {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF();
+    const imgData = canvas.toDataURL("image/png");
+    pdf.addImage(imgData, "PNG", 10, 10, 190, 100);
+    pdf.save("signature.pdf");
+  });
 });
