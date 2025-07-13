@@ -2,24 +2,24 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Signature Pad</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <h1>📝 Signature Pad</h1>
 
-  <div class="canvas-box">
-    <canvas id="signatureCanvas"></canvas>
+  <div class="canvas-container">
+    <canvas id="canvas"></canvas>
   </div>
 
-  <div class="button-row">
+  <div class="buttons">
     <button id="clear">🧽 Clear</button>
-    <button id="export-png">📁 PNG</button>
-    <button id="export-pdf">📄 PDF</button>
+    <button id="png">📁 PNG</button>
+    <button id="pdf">📄 PDF</button>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
